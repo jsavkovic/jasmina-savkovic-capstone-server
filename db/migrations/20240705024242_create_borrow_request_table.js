@@ -11,7 +11,7 @@ export function up(knex) {
         table.timestamp('timestamp').defaultTo(knex.fn.now());
         table.date('start_date');
         table.date('end_date');
-        table.integer('borrow_status_id').unsigned().references('id').inTable('borrow_status');
+        table.integer('borrow_status_id').unsigned().references('id').inTable('borrow_status').onDelete('CASCADE');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
     });
