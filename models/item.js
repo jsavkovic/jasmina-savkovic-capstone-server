@@ -24,3 +24,7 @@ export const getGiftItems = () => {
 export const createItem = (newItem) => {
     return db('item').insert(newItem).returning('*');
 };
+
+export const getItemById = (itemId) => {
+    return db('item').where({ id: itemId }).first();
+};

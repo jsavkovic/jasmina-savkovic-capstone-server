@@ -2,7 +2,7 @@ import knex from 'knex';
 import knexConfig from '../knexfile.js';
 const db = knex(knexConfig);
 
-import { getAllItems, getLendItems, getGiftItems, createItem } from '../models/item.js'
+import { getAllItems, getLendItems, getGiftItems, createItem, getItemById } from '../models/item.js'
 
 export const getAllItemsHandler = async (req, res) => {
     try {
@@ -52,5 +52,20 @@ export const createItemHandler = async (req, res) => {
     } catch (err) {
         console.error('Error creating item:', err);
         res.status(500).json({ error: 'Failed to create item' });
+    }
+};
+
+export const getItemByIdHandler = async (req, res) => {
+    const { itemId } = req.params;
+
+    try {
+        const item = await getItemById(itemId);
+        if (item) {
+            res.status(200).json(item);
+        } else {
+            res.status(404).json({ error: 'Item not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to retrieve item' });
     }
 };
