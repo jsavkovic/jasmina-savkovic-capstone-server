@@ -9,9 +9,9 @@ export default {
     password: process.env.DB_LOCAL_PASSWORD,
   },
   migrations: {
-    directory: './migrations'
+    directory: './src/db/migrations'
   },
   seeds: {
-    directory: './seeds'
+    directory: './src/db/seeds'
   }
 };
