@@ -28,3 +28,9 @@ export const createItem = (newItem) => {
 export const getItemById = (itemId) => {
     return db('item').where({ id: itemId }).first();
 };
+
+export const updateItemById = (itemId, updatedItem) => {
+    return db('item')
+        .where({ id: itemId })
+        .update(updatedItem);
+}
