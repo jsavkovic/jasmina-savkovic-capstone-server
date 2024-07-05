@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllItemsHandler, getLendItemsHandler, getGiftItemsHandler, createItemHandler, getItemByIdHandler, updateItemByIdHandler } from '../controllers/itemController.js'
+import { getAllItemsHandler, getLendItemsHandler, getGiftItemsHandler, createItemHandler, getItemByIdHandler, updateItemByIdHandler, deleteItemByIdHandler } from '../controllers/itemController.js'
 
 const router = express.Router();
 
@@ -9,5 +9,6 @@ router.get('/items/gift', getGiftItemsHandler);
 router.post('/items', createItemHandler);
 router.get('/items/:itemId', getItemByIdHandler);
 router.put('/items/:itemId', updateItemByIdHandler);
+router.delete('/items/:itemId', deleteItemByIdHandler);
 
 export default router;

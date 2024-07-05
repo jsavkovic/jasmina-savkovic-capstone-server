@@ -34,3 +34,9 @@ export const updateItemById = (itemId, updatedItem) => {
         .where({ id: itemId })
         .update(updatedItem);
 }
+
+export const deleteItemById = (itemId) => {
+    return db('item')
+        .where({ id: itemId })
+        .del();
+};

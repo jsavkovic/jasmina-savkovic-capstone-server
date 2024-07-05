@@ -2,7 +2,7 @@ import knex from 'knex';
 import knexConfig from '../knexfile.js';
 const db = knex(knexConfig);
 
-import { getAllItems, getLendItems, getGiftItems, createItem, getItemById, updateItemById } from '../models/item.js'
+import { getAllItems, getLendItems, getGiftItems, createItem, getItemById, updateItemById, deleteItemById } from '../models/item.js'
 
 export const getAllItemsHandler = async (req, res) => {
     try {
@@ -85,3 +85,18 @@ export const updateItemByIdHandler = async (req, res) => {
         res.status(500).json({ error: 'Failed to update item' });
     }
 };
+
+export const deleteItemByIdHandler = async (req, res) => {
+    const { itemId } = req.params;
+
+    try {
+        const affectedRows = await deleteItemById(itemId);
+        if (affectedRows) {
+            res.status(200).json({ message: 'Item successfully deleted' });
+        } else {
+            res.status(404).json({ error: 'Item not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to delete item' });
+    }
+}
