@@ -11,7 +11,8 @@ export function seed(knex) {
       return knex('relationship_status').insert([
         { id: 1, status: 'pending' },
         { id: 2, status: 'accepted' },
-        { id: 3, status: 'declined' }
+        { id: 3, status: 'declined' },
+        { id: 4, status: 'cancelled' }
       ]);
     })
     .then(() => {
