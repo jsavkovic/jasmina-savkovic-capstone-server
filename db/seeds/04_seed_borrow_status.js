@@ -13,7 +13,8 @@ export function seed(knex) {
         { id: 2, status: 'accepted' },
         { id: 3, status: 'borrowed' },
         { id: 4, status: 'declined' },
-        { id: 5, status: 'returned' }
+        { id: 5, status: 'returned' },
+        { id: 6, status: 'cancelled' }
       ]);
     })
     .then(() => {

@@ -4,7 +4,9 @@ import {
     getBorrowRequestsByLender,
     getBorrowRequestByItem,
     getBorrowRequestById,
-    createBorrowRequest
+    getBorrowRequestsByStatus,
+    createBorrowRequest,
+    updateBorrowRequestStatus
 } from '../models/borrowRequest.js'
 
 
@@ -65,6 +67,17 @@ export const getBorrowRequestByIdHandler = async (req, res) => {
     }
 };
 
+export const getBorrowRequestsByStatusHandler = async (req, res) => {
+    const statusId = req.params.statusId;
+
+    try {
+        const requests = await getBorrowRequestsByStatus(statusId);
+        res.status(200).json(requests);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to retrieve borrow requests' });
+    }
+};
+
 export const createBorrowRequestHandler = async (req, res) => {
     const {
         borrower_id,
@@ -98,5 +111,17 @@ export const createBorrowRequestHandler = async (req, res) => {
         res.status(201).json(newBorrowRequest);
     } catch (err) {
         res.status(500).json({ error: 'Failed to create borrow request' });
+    }
+};
+
+export const updateBorrowRequestStatusHandler = async (req, res) => {
+    const requestId = req.params.requestId;
+    const { borrow_status_id } = req.body;
+
+    try {
+        await updateBorrowRequestStatus(requestId, borrow_status_id);
+        res.status(200).json({ message: 'Borrow request status updated successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update borrow request status' });
     }
 };

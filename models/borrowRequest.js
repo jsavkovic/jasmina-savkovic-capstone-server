@@ -32,6 +32,18 @@ export const getBorrowRequestById = (requestId) => {
         .first();
 };
 
+export const getBorrowRequestsByStatus = (statusId) => {
+    return db('borrow_request')
+        .where('borrow_status_id', statusId)
+        .select('*');
+};
+
 export const createBorrowRequest = (borrowRequest) => {
     return db('borrow_request').insert(borrowRequest);
+};
+
+export const updateBorrowRequestStatus = (requestId, statusId) => {
+    return db('borrow_request')
+        .where('id', requestId)
+        .update({ borrow_status_id: statusId });
 };
