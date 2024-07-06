@@ -25,6 +25,10 @@ export const getUserByEmail = (email) => {
     return db('users').where('email', email).first();
 };
 
+export const getUserById = (id) => {
+    return db('users').where('id', id).first();
+};
+
 export const updateLastLogin = (userId) => {
     console.log("Updating last login for user ID:", userId);
     return db('users')
