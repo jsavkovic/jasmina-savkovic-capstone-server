@@ -11,7 +11,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 8080;
 
 app.use('/items', itemRoutes);
-app.use('/borrow-request', borrowRequestRoutes);
+app.use('/borrow-requests', borrowRequestRoutes);
 
 app.get('/', (_req, res) => {
     res.send('This is a homePage for Lendaroo, please make a request!!');
