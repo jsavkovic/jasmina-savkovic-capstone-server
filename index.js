@@ -4,6 +4,7 @@ import 'dotenv/config';
 import itemRoutes from './routes/itemRoutes.js';
 import borrowRequestRoutes from './routes/borrowRequestRoutes.js';
 import userRelationshipRoutes from './routes/userRelationshipRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 app.use(cors());
@@ -13,7 +14,8 @@ const PORT = process.env.PORT || 8080;
 
 app.use('/items', itemRoutes);
 app.use('/borrow-requests', borrowRequestRoutes);
-app.use('/friends', userRelationshipRoutes)
+app.use('/friends', userRelationshipRoutes);
+app.use('/auth', userRoutes);
 
 app.get('/', (_req, res) => {
     res.send('This is a homePage for Lendaroo, please make a request!!');
