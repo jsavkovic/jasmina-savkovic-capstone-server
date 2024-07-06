@@ -42,8 +42,8 @@ export const createBorrowRequest = (borrowRequest) => {
     return db('borrow_request').insert(borrowRequest);
 };
 
-export const updateBorrowRequestStatus = (requestId, statusId) => {
+export const updateBorrowRequest = (requestId, updateData) => {
     return db('borrow_request')
         .where('id', requestId)
-        .update({ borrow_status_id: statusId });
+        .update(updateData);
 };

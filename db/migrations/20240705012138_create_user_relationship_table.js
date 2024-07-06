@@ -7,7 +7,6 @@ export function up(knex) {
         table.increments('id').primary();
         table.bigInteger('sender_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
         table.bigInteger('receiver_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
-        table.timestamp('requested').defaultTo(knex.fn.now());
         table.integer('relationship_status_id').unsigned().references('id').inTable('relationship_status');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

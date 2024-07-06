@@ -7,7 +7,7 @@ import {
     getBorrowRequestByIdHandler,
     getBorrowRequestsByStatusHandler,
     createBorrowRequestHandler,
-    updateBorrowRequestStatusHandler
+    updateBorrowRequestHandler
 } from '../controllers/borrowRequestController.js';
 
 const router = express.Router();
@@ -20,6 +20,6 @@ router.get('/:requestId', getBorrowRequestByIdHandler);
 router.get('/status/:statusId', getBorrowRequestsByStatusHandler);
 
 router.post('/', createBorrowRequestHandler);
-router.put('/:requestId', updateBorrowRequestStatusHandler);
+router.put('/:requestId', updateBorrowRequestHandler);
 
 export default router;

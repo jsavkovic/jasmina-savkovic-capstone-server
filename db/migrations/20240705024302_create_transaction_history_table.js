@@ -9,7 +9,6 @@ export function up(knex) {
         table.integer('action_id').unsigned().references('id').inTable('item_status').onDelete('CASCADE');
         table.bigInteger('actor_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
         table.bigInteger('target_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
-        table.timestamp('timestamp').defaultTo(knex.fn.now());
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
     });

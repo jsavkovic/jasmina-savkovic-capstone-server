@@ -6,7 +6,7 @@ import {
     getBorrowRequestById,
     getBorrowRequestsByStatus,
     createBorrowRequest,
-    updateBorrowRequestStatus
+    updateBorrowRequest
 } from '../models/borrowRequest.js'
 
 
@@ -114,12 +114,17 @@ export const createBorrowRequestHandler = async (req, res) => {
     }
 };
 
-export const updateBorrowRequestStatusHandler = async (req, res) => {
+export const updateBorrowRequestHandler = async (req, res) => {
     const requestId = req.params.requestId;
-    const { borrow_status_id } = req.body;
+    const { borrow_status_id, start_date, end_date } = req.body;
+
+    const updateData = {};
+    if (borrow_status_id) updateData.borrow_status_id = borrow_status_id;
+    if (start_date) updateData.start_date = start_date;
+    if (end_date) updateData.end_date = end_date;
 
     try {
-        await updateBorrowRequestStatus(requestId, borrow_status_id);
+        await updateBorrowRequest(requestId, updateData);
         res.status(200).json({ message: 'Borrow request status updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Failed to update borrow request status' });
