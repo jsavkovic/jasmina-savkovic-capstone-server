@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 8080;
 app.use('/items', itemRoutes);
 app.use('/borrow-requests', borrowRequestRoutes);
 app.use('/friends', userRelationshipRoutes);
-app.use('/auth', userRoutes);
+app.use('/users', userRoutes);
 
 app.get('/', (_req, res) => {
     res.send('This is a homePage for Lendaroo, please make a request!!');
