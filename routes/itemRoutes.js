@@ -3,12 +3,12 @@ import { getAllItemsHandler, getLendItemsHandler, getGiftItemsHandler, createIte
 
 const router = express.Router();
 
-router.get('/items', getAllItemsHandler);
-router.get('/items/lend', getLendItemsHandler);
-router.get('/items/gift', getGiftItemsHandler);
-router.post('/items', createItemHandler);
-router.get('/items/:itemId', getItemByIdHandler);
-router.put('/items/:itemId', updateItemByIdHandler);
-router.delete('/items/:itemId', deleteItemByIdHandler);
+router.get('/', getAllItemsHandler);
+router.get('/lend', getLendItemsHandler);
+router.get('/gift', getGiftItemsHandler);
+router.post('/', createItemHandler);
+router.get('/:itemId', getItemByIdHandler);
+router.put('/:itemId', updateItemByIdHandler);
+router.delete('/:itemId', deleteItemByIdHandler);
 
 export default router;
