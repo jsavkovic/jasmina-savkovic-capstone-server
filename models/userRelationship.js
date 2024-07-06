@@ -3,6 +3,12 @@ import knexConfig from '../knexfile.js';
 
 const db = knex(knexConfig);
 
+export const getUserRelationshipById = (id) => {
+    return db('user_relationship')
+        .where({ id })
+        .first();
+};
+
 export const getFriendsByUserId = (userId) => {
     return db('user_relationship')
         .join('users as u1', 'user_relationship.sender_id', 'u1.id')
@@ -27,3 +33,27 @@ export const getPendingRequestsByUserId = (userId) => {
         .select('user_relationship.*', 'u1.first_name as sender_first_name', 'u1.last_name as sender_last_name', 'u2.first_name as receiver_first_name', 'u2.last_name as receiver_last_name');
 };
 
+export const createFriendRequest = (relationship) => {
+    return db('user_relationship').insert(relationship);
+};
+
+export const getExistingRelationship = (sender_id, receiver_id) => {
+    return db('user_relationship')
+        .where(function () {
+            this.where({ sender_id, receiver_id }).orWhere({ sender_id: receiver_id, receiver_id: sender_id });
+        })
+        .andWhere(function () {
+            this.where('relationship_status_id', 1).orWhere('relationship_status_id', 2);
+        })
+        .first();
+};
+
+export const updateUserRelationshipStatus = (id, statusId) => {
+    return db('user_relationship')
+        .where('id', id)
+        .update({ relationship_status_id: statusId });
+};
+
+export const deleteFriendRequest = (id) => {
+    return db('user_relationship').where('id', id).del();
+};
