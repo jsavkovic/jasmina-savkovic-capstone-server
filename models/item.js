@@ -21,8 +21,10 @@ export const getGiftItems = () => {
         .select('item.*')
 };
 
-export const createItem = (newItem) => {
-    return db('item').insert(newItem).returning('*');
+export const createItem = async (newItem) => {
+    const [id] = await db('item')
+        .insert(newItem);
+    return getItemById(id);
 };
 
 export const getItemById = (itemId) => {

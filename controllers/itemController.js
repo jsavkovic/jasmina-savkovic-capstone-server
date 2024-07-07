@@ -32,28 +32,32 @@ export const getGiftItemsHandler = async (req, res) => {
 }
 
 export const createItemHandler = async (req, res) => {
+    const { name, description, status_id, type_id, category_id, user_id } = req.body;
+    const file = req.file;
+
     try {
         const newItem = {
-            name: req.body.name,
-            description: req.body.description,
-            status_id: req.body.status_id,
-            type_id: req.body.type_id,
-            image: req.body.image,
-            category_id: req.body.category_id,
-            user_id: req.body.user_id,
+            name,
+            description,
+            status_id,
+            type_id,
+            image: file ? file.path : null,
+            category_id,
+            user_id,
             created_at: db.fn.now(),
             updated_at: db.fn.now()
         };
 
         console.log('Creating item with data:', newItem);
 
-        const [item] = await createItem(newItem);
-        res.status(201).json(item);
+        const createdItem = await createItem(newItem);
+        res.status(201).json(createdItem);
     } catch (err) {
         console.error('Error creating item:', err);
         res.status(500).json({ error: 'Failed to create item' });
     }
 };
+
 
 export const getItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;
