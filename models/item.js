@@ -7,18 +7,11 @@ export const getAllItems = () => {
     return db('item').select('*');
 };
 
-export const getLendItems = () => {
+export const getItemsByCategory = (category) => {
     return db('item')
         .join('item_category', 'item.category_id', 'item_category.id')
-        .where('item_category.category', 'lend')
-        .select('item.*')
-};
-
-export const getGiftItems = () => {
-    return db('item')
-        .join('item_category', 'item.category_id', 'item_category.id')
-        .where('item_category.category', 'gift')
-        .select('item.*')
+        .where('item_category.category', category)
+        .select('item.*');
 };
 
 export const createItem = async (newItem) => {

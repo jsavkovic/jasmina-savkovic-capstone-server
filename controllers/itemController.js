@@ -2,7 +2,7 @@ import knex from 'knex';
 import knexConfig from '../knexfile.js';
 const db = knex(knexConfig);
 
-import { getAllItems, getLendItems, getGiftItems, createItem, getItemById, updateItemById, deleteItemById } from '../models/item.js'
+import { getAllItems, getItemsByCategory, createItem, getItemById, updateItemById, deleteItemById } from '../models/item.js'
 
 export const getAllItemsHandler = async (req, res) => {
     try {
@@ -13,23 +13,15 @@ export const getAllItemsHandler = async (req, res) => {
     }
 };
 
-export const getLendItemsHandler = async (req, res) => {
+export const getItemsHandler = async (req, res) => {
+    const { category } = req.params;
     try {
-        const items = await getLendItems();
+        const items = await getItemsByCategory(category);
         res.status(200).json(items);
     } catch (err) {
-        res.status(500).json({ error: 'Failed to retrieve lend items' });
+        res.status(500).json({ error: `Failed to retrieve ${category} items` });
     }
-}
-
-export const getGiftItemsHandler = async (req, res) => {
-    try {
-        const items = await getGiftItems();
-        res.status(200).json(items);
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to retrieve gift items' });
-    }
-}
+};
 
 export const createItemHandler = async (req, res) => {
     const { name, description, status_id, type_id, category_id, user_id } = req.body;

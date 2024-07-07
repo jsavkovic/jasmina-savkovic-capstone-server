@@ -4,8 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import {
     getAllItemsHandler,
-    getLendItemsHandler,
-    getGiftItemsHandler,
+    getItemsHandler,
     createItemHandler,
     getItemByIdHandler,
     updateItemByIdHandler,
@@ -32,8 +31,7 @@ const upload = multer({ storage });
 
 router.post('/', upload.single('image'), createItemHandler);
 router.get('/', getAllItemsHandler);
-router.get('/lend', getLendItemsHandler);
-router.get('/gift', getGiftItemsHandler);
+router.get('/:category', getItemsHandler);
 router.get('/:itemId', getItemByIdHandler);
 router.put('/:itemId', updateItemByIdHandler);
 router.delete('/:itemId', deleteItemByIdHandler);
