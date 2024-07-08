@@ -7,13 +7,6 @@ export const getAllItems = () => {
     return db('item').select('*');
 };
 
-export const getItemsByCategory = (category) => {
-    return db('item')
-        .join('item_category', 'item.category_id', 'item_category.id')
-        .where('item_category.category', category)
-        .select('item.*');
-};
-
 export const createItem = async (newItem) => {
     const [id] = await db('item')
         .insert(newItem);
@@ -21,7 +14,18 @@ export const createItem = async (newItem) => {
 };
 
 export const getItemById = (itemId) => {
-    return db('item').where({ id: itemId }).first();
+    return db('item')
+        .join('item_status', 'item.status_id', '=', 'item_status.id')
+        .join('item_type', 'item.type_id', '=', 'item_type.id')
+        .join('users', 'item.user_id', '=', 'users.id')
+        .where('item.id', itemId)
+        .select(
+            'item.*',
+            'item_status.status as status',
+            'item_type.type as category',
+            db.raw("CONCAT(users.first_name, ' ', users.last_name) as owner")
+        )
+        .first();
 };
 
 export const updateItemById = (itemId, updatedItem) => {

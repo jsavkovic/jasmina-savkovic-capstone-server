@@ -1,4 +1,4 @@
-import { createUser, getUserByEmail, getUserById, updateLastLogin } from '../models/user.js';
+import { createUser, getUserByEmail, getUserById, updateLastLogin, getItemsByUser } from '../models/user.js';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/auth.js';
 
@@ -70,5 +70,21 @@ export const getProfileHandler = async (req, res) => {
         res.status(200).json(user);
     } catch (err) {
         res.status(500).json({ error: 'Failed to retrieve profile' });
+    }
+};
+
+export const getItemsByUserHandler = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const items = await getItemsByUser(userId);
+        if (items.length > 0) {
+            res.status(200).json(items);
+        } else {
+            res.status(404).json({ error: 'No items found for this user' });
+        }
+    } catch (err) {
+        console.error(`Error retrieving items for user ${userId}:`, err);
+        res.status(500).json({ error: 'Failed to retrieve items' });
     }
 };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUserHandler, loginUserHandler, getProfileHandler } from '../controllers/userController.js';
+import { registerUserHandler, loginUserHandler, getProfileHandler, getItemsByUserHandler } from '../controllers/userController.js';
 import { authenticate } from '../middleware/authMiddleware.js'
 
 const router = express.Router();
@@ -7,5 +7,6 @@ const router = express.Router();
 router.post('/register', registerUserHandler);
 router.post('/login', loginUserHandler);
 router.get('/profile', authenticate, getProfileHandler);
+router.get('/:userId/items', getItemsByUserHandler);
 
 export default router;

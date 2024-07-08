@@ -42,7 +42,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/items', itemRoutes);
 app.use('/borrow-requests', borrowRequestRoutes);
 app.use('/friends', userRelationshipRoutes);
-app.use('/users', userRoutes);
+app.use('/user', userRoutes);
 
 app.get('/', (_req, res) => {
     res.send('This is a homePage for Lendaroo, please make a request!!');

@@ -9,8 +9,8 @@ export function seed(knex) {
     })
     .then(() => {
       return knex('item_status').insert([
-        { id: 1, status: 'listed' },
-        { id: 2, status: 'inactive' }
+        { id: 1, status: 'Listed' },
+        { id: 2, status: 'Inactive' }
       ]);
     })
     .then(() => {

@@ -2,7 +2,7 @@ import knex from 'knex';
 import knexConfig from '../knexfile.js';
 const db = knex(knexConfig);
 
-import { getAllItems, getItemsByCategory, createItem, getItemById, updateItemById, deleteItemById } from '../models/item.js'
+import { getAllItems, createItem, getItemById, updateItemById, deleteItemById } from '../models/item.js'
 
 export const getAllItemsHandler = async (req, res) => {
     try {
@@ -10,16 +10,6 @@ export const getAllItemsHandler = async (req, res) => {
         res.status(200).json(items);
     } catch (err) {
         res.status(500).json({ error: 'Failed to retrieve items' });
-    }
-};
-
-export const getItemsHandler = async (req, res) => {
-    const { category } = req.params;
-    try {
-        const items = await getItemsByCategory(category);
-        res.status(200).json(items);
-    } catch (err) {
-        res.status(500).json({ error: `Failed to retrieve ${category} items` });
     }
 };
 
@@ -62,6 +52,7 @@ export const getItemByIdHandler = async (req, res) => {
             res.status(404).json({ error: 'Item not found' });
         }
     } catch (err) {
+        console.error(`Error retrieving item with ID ${itemId}:`, err);
         res.status(500).json({ error: 'Failed to retrieve item' });
     }
 };

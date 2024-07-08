@@ -6,14 +6,13 @@ const db = knex(knexConfig);
 const seedFiles = [
     './seeds/01_seed_item_status.js',
     './seeds/02_seed_item_type.js',
-    './seeds/03_seed_item_category.js',
-    './seeds/04_seed_borrow_status.js',
-    './seeds/05_seed_relationship_status.js',
-    './seeds/06_seed_users.js',
-    './seeds/07_seed_item.js',
-    './seeds/08_seed_borrow_request.js',
-    './seeds/09_seed_user_relationship.js',
-    './seeds/10_seed_transaction_history.js'
+    './seeds/03_seed_borrow_status.js',
+    './seeds/04_seed_relationship_status.js',
+    './seeds/05_seed_users.js',
+    './seeds/06_seed_item.js',
+    './seeds/07_seed_borrow_request.js',
+    './seeds/08_seed_user_relationship.js',
+    './seeds/09_seed_transaction_history.js'
 ];
 
 async function runSeeds() {

@@ -35,3 +35,9 @@ export const updateLastLogin = (userId) => {
         .where({ id: userId })
         .update({ last_login: db.fn.now() });
 };
+
+export const getItemsByUser = (userId) => {
+    return db('item')
+        .where('item.user_id', userId)
+        .select('item.*');
+};
