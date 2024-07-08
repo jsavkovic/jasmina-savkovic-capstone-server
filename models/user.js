@@ -36,8 +36,22 @@ export const updateLastLogin = (userId) => {
         .update({ last_login: db.fn.now() });
 };
 
-export const getItemsByUser = (userId) => {
-    return db('item')
+export const getItemsByUser = (userId, status_id) => {
+    const query = db('item')
+        .join('item_status', 'item.status_id', '=', 'item_status.id')
+        .join('item_type', 'item.type_id', '=', 'item_type.id')
+        .join('users', 'item.user_id', '=', 'users.id')
         .where('item.user_id', userId)
-        .select('item.*');
+        .select(
+            'item.*',
+            'item_status.status as status',
+            'item_type.type as category',
+            db.raw("CONCAT(users.first_name, ' ', users.last_name) as owner")
+        );
+
+    if (status_id) {
+        query.where('item.status_id', status_id);
+    }
+
+    return query;
 };

@@ -75,9 +75,10 @@ export const getProfileHandler = async (req, res) => {
 
 export const getItemsByUserHandler = async (req, res) => {
     const { userId } = req.params;
+    const { status_id } = req.query;
 
     try {
-        const items = await getItemsByUser(userId);
+        const items = await getItemsByUser(userId, status_id);
         if (items.length > 0) {
             res.status(200).json(items);
         } else {
