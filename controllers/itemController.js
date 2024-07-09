@@ -59,19 +59,55 @@ export const getItemByIdHandler = async (req, res) => {
 
 export const updateItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;
-    const updatedItem = req.body;
+    const { name, description, type_id, status_id } = req.body;
+    const image = req.file ? req.file.filename : null;
 
     try {
-        const affectedRows = await updateItemById(itemId, updatedItem);
-        if (affectedRows) {
-            res.status(200).json({ message: 'Item successfully updated' });
-        } else {
-            res.status(404).json({ error: 'Item not found' });
+        if (!name || !description || !type_id || !status_id) {
+            return res.status(400).json({ error: 'All fields are required' });
         }
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to update item' });
+
+        const updatedItem = await updateItemById(itemId, {
+            name,
+            description,
+            type_id,
+            status_id,
+            ...(image && { image })
+        });
+
+        if (!updatedItem) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.status(200).json({ message: 'Item updated successfully' });
+    } catch (error) {
+        console.error('Error updating item:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const updateItemStatusHandler = async (req, res) => {
+    const { itemId } = req.params;
+    const { status_id } = req.body;
+
+    try {
+        if (typeof status_id === 'undefined') {
+            return res.status(400).json({ error: 'status_id is required' });
+        }
+
+        const updatedItem = await updateItemById(itemId, { status_id });
+
+        if (!updatedItem) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.status(200).json({ message: 'Item status updated successfully' });
+    } catch (error) {
+        console.error('Error updating item status:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 
 export const deleteItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;

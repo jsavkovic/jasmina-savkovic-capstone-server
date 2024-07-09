@@ -7,6 +7,7 @@ import {
     createItemHandler,
     getItemByIdHandler,
     updateItemByIdHandler,
+    updateItemStatusHandler,
     deleteItemByIdHandler
 } from '../controllers/itemController.js';
 
@@ -31,7 +32,8 @@ const upload = multer({ storage });
 router.post('/', upload.single('image'), createItemHandler);
 router.get('/', getAllItemsHandler);
 router.get('/:itemId', getItemByIdHandler)
-router.put('/:itemId', updateItemByIdHandler);
+router.put('/:itemId', upload.single('image'), updateItemByIdHandler);
+router.put('/:itemId/status', updateItemStatusHandler);
 router.delete('/:itemId', deleteItemByIdHandler);
 
 export default router;
