@@ -2,7 +2,13 @@ import knex from 'knex';
 import knexConfig from '../knexfile.js';
 const db = knex(knexConfig);
 
-import { getAllItems, createItem, getItemById, updateItemById, deleteItemById } from '../models/item.js'
+import {
+    getAllItems,
+    createItem,
+    getItemById,
+    updateItemById,
+    deleteItemById
+} from '../models/item.js'
 
 export const getAllItemsHandler = async (req, res) => {
     try {
