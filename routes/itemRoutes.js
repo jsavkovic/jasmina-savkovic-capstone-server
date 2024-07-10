@@ -15,7 +15,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join('uploads/');
+        const uploadDir = path.join(__dirname, 'uploads');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
@@ -28,6 +28,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
 
 router.post('/', upload.single('image'), createItemHandler);
 router.get('/', getAllItemsHandler);

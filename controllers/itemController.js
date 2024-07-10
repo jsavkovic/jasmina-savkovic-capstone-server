@@ -14,31 +14,36 @@ export const getAllItemsHandler = async (req, res) => {
 };
 
 export const createItemHandler = async (req, res) => {
-    const { name, description, status_id, type_id, category_id, user_id } = req.body;
+    const { name, description, status_id, type_id, user_id } = req.body;
     const file = req.file;
 
     try {
+        if (!name || !description || !status_id || !type_id || !user_id) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
         const newItem = {
             name,
             description,
             status_id,
             type_id,
-            image: file ? file.path : null,
-            category_id,
+            image: file ? file.filename : null,
             user_id,
             created_at: db.fn.now(),
             updated_at: db.fn.now()
         };
 
+        console.log('File:', file); // Log the file object
         console.log('Creating item with data:', newItem);
 
         const createdItem = await createItem(newItem);
         res.status(201).json(createdItem);
     } catch (err) {
-        console.error('Error creating item:', err);
+        console.error('Error creating item:', err.message, err.stack);
         res.status(500).json({ error: 'Failed to create item' });
     }
 };
+
 
 
 export const getItemByIdHandler = async (req, res) => {
@@ -67,15 +72,20 @@ export const updateItemByIdHandler = async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        const updatedItem = await updateItemById(itemId, {
+        const updatedItem = {
             name,
             description,
             type_id,
             status_id,
-            ...(image && { image })
-        });
+            ...(image && { image }) // Store only the filename
+        };
 
-        if (!updatedItem) {
+        console.log('File:', req.file); // Log the file object
+        console.log('Updating item with data:', updatedItem);
+
+        const updatedItemResult = await updateItemById(itemId, updatedItem);
+
+        if (!updatedItemResult) {
             return res.status(404).json({ error: 'Item not found' });
         }
 
@@ -85,7 +95,6 @@ export const updateItemByIdHandler = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-
 export const updateItemStatusHandler = async (req, res) => {
     const { itemId } = req.params;
     const { status_id } = req.body;

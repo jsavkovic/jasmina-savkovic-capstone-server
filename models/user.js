@@ -25,8 +25,12 @@ export const getUserByEmail = (email) => {
     return db('users').where('email', email).first();
 };
 
-export const getUserById = (id) => {
-    return db('users').where('id', id).first();
+export const getUserById = async (userId) => {
+    console.log(`Querying database for userId: ${userId}`);
+    return db('users')
+        .where({ id: userId })
+        .first()
+        .select('first_name', 'last_name', 'email');
 };
 
 export const updateLastLogin = (userId) => {

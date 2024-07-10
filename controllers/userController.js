@@ -1,4 +1,10 @@
-import { createUser, getUserByEmail, getUserById, updateLastLogin, getItemsByUser } from '../models/user.js';
+import {
+    createUser,
+    getUserByEmail,
+    getUserById,
+    updateLastLogin,
+    getItemsByUser
+} from '../models/user.js';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/auth.js';
 
@@ -56,6 +62,22 @@ export const loginUserHandler = async (req, res) => {
     } catch (err) {
         console.error("Error logging in user:", err);
         res.status(500).json({ error: 'Failed to login user' });
+    }
+};
+
+export const getUserByIdHandler = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const user = await getUserById(userId);
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (err) {
+        console.error(`Error retrieving user ${userId}:`, err);
+        res.status(500).json({ error: 'Failed to retrieve user' });
     }
 };
 

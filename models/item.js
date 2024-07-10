@@ -8,8 +8,7 @@ export const getAllItems = () => {
 };
 
 export const createItem = async (newItem) => {
-    const [id] = await db('item')
-        .insert(newItem);
+    const [id] = await db('item').insert(newItem);
     return getItemById(id);
 };
 
