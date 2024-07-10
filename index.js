@@ -19,6 +19,23 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 
+// multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = path.join(__dirname, 'uploads/');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir);
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const extension = file.mimetype.split('/')[1];
+        cb(null, `${Date.now()}.${extension}`);
+    }
+});
+
+const upload = multer({ storage });
+
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -31,17 +48,17 @@ app.get('/', (_req, res) => {
     res.send('This is a homePage for Lendaroo, please make a request!!');
 });
 
-// // Handle file upload 
-// app.post('/upload', upload.single('file'), (req, res) => {
-//     const file = req.file;
-//     if (!file) {
-//         return res.status(400).send({ message: 'Please upload a file' });
-//     }
-//     res.send({
-//         message: 'File uploaded successfully',
-//         filename: file.filename,
-//     });
-// });
+// Handle file upload 
+app.post('/upload', upload.single('file'), (req, res) => {
+    const file = req.file;
+    if (!file) {
+        return res.status(400).send({ message: 'Please upload a file' });
+    }
+    res.send({
+        message: 'File uploaded successfully',
+        filename: file.filename,
+    });
+});
 
 app.listen(PORT, () => {
     console.log('App is running on port ', PORT);

@@ -12,10 +12,10 @@ export const getAllItemsHandler = async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve items' });
     }
 };
-
+// *********************************************************************************
 export const createItemHandler = async (req, res) => {
     const { name, description, status_id, type_id, user_id } = req.body;
-    const file = req.file;
+    const image = req.file ? req.file.filename : null;
 
     try {
         if (!name || !description || !status_id || !type_id || !user_id) {
@@ -27,13 +27,13 @@ export const createItemHandler = async (req, res) => {
             description,
             status_id,
             type_id,
-            image: file ? file.filename : null,
+            image,
             user_id,
             created_at: db.fn.now(),
             updated_at: db.fn.now()
         };
 
-        console.log('File:', file); // Log the file object
+        console.log('File:', req.file);
         console.log('Creating item with data:', newItem);
 
         const createdItem = await createItem(newItem);
@@ -44,7 +44,7 @@ export const createItemHandler = async (req, res) => {
     }
 };
 
-
+// *********************************************************************************
 
 export const getItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;
@@ -62,6 +62,7 @@ export const getItemByIdHandler = async (req, res) => {
     }
 };
 
+// ********************************
 export const updateItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;
     const { name, description, type_id, status_id } = req.body;
@@ -77,10 +78,10 @@ export const updateItemByIdHandler = async (req, res) => {
             description,
             type_id,
             status_id,
-            ...(image && { image }) // Store only the filename
+            ...(image && { image })
         };
 
-        console.log('File:', req.file); // Log the file object
+        console.log('File:', req.file);
         console.log('Updating item with data:', updatedItem);
 
         const updatedItemResult = await updateItemById(itemId, updatedItem);
@@ -95,6 +96,9 @@ export const updateItemByIdHandler = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+// ********************************
+
+
 export const updateItemStatusHandler = async (req, res) => {
     const { itemId } = req.params;
     const { status_id } = req.body;
