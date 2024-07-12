@@ -4,7 +4,7 @@ import { getUserRelationshipByIdHandler, getFriendsHandler, getPendingRequestsHa
 const router = express.Router();
 
 router.get('/:requestId', getUserRelationshipByIdHandler);
-router.get('/:userId', getFriendsHandler);
+router.get('/:userId/all', getFriendsHandler);
 router.get('/pending/:userId', getPendingRequestsHandler);
 router.post('/', createFriendRequestHandler)
 router.put('/:requestId', updateUserRelationshipStatusHandler)

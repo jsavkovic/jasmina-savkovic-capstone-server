@@ -18,7 +18,7 @@ export const getAllItemsHandler = async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve items' });
     }
 };
-// *********************************************************************************
+
 export const createItemHandler = async (req, res) => {
     const { name, description, status_id, type_id, user_id } = req.body;
     const image = req.file ? req.file.filename : null;
@@ -49,8 +49,6 @@ export const createItemHandler = async (req, res) => {
         res.status(500).json({ error: 'Failed to create item' });
     }
 };
-
-// *********************************************************************************
 
 export const getItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;

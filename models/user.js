@@ -30,7 +30,7 @@ export const getUserById = async (userId) => {
     return db('users')
         .where({ id: userId })
         .first()
-        .select('first_name', 'last_name', 'email');
+        .select('first_name', 'last_name', 'email', 'image');
 };
 
 export const updateLastLogin = (userId) => {

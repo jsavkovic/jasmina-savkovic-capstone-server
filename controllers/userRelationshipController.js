@@ -16,23 +16,30 @@ export const getUserRelationshipByIdHandler = async (req, res) => {
 };
 
 export const getFriendsHandler = async (req, res) => {
-    const userId = req.params.userId;
+    const { userId } = req.params;
 
     try {
         const relationships = await getFriendsByUserId(userId);
-        const friendIds = relationships.map(rel => {
-            const friendId = rel.sender_id === parseInt(userId) ? rel.receiver_id : rel.sender_id;
-            const friendFirstName = rel.sender_id === parseInt(userId) ? rel.receiver_first_name : rel.sender_first_name;
-            const friendLastName = rel.sender_id === parseInt(userId) ? rel.receiver_last_name : rel.sender_last_name;
+        console.log('Fetched relationships:', relationships);
+        const friends = relationships.map(rel => {
+            const isSender = rel.sender_id === parseInt(userId, 10);
+            const friendId = isSender ? rel.receiver_id : rel.sender_id;
+            const friendFirstName = isSender ? rel.receiver_first_name : rel.sender_first_name;
+            const friendLastName = isSender ? rel.receiver_last_name : rel.sender_last_name;
+            const friendEmail = isSender ? rel.receiver_email : rel.sender_email;
+            const friendImage = isSender ? rel.receiver_image : rel.sender_image;
             return {
                 id: friendId,
                 first_name: friendFirstName,
                 last_name: friendLastName,
-                relationship_status_id: rel.relationship_status_id
+                email: friendEmail,
+                image: friendImage,
             };
         });
-        res.status(200).json(friendIds);
+        console.log('Formatted friends:', friends);
+        res.status(200).json(friends);
     } catch (err) {
+        console.error(`Error retrieving friends for user ${userId}:`, err);
         res.status(500).json({ error: 'Failed to retrieve friends' });
     }
 };
@@ -42,20 +49,19 @@ export const getPendingRequestsHandler = async (req, res) => {
 
     try {
         const relationships = await getPendingRequestsByUserId(userId);
-        const pendingRequests = relationships.map(rel => {
-            const requestId = rel.sender_id === parseInt(userId) ? rel.receiver_id : rel.sender_id;
-            const requestFirstName = rel.sender_id === parseInt(userId) ? rel.receiver_first_name : rel.sender_first_name;
-            const requestLastName = rel.sender_id === parseInt(userId) ? rel.receiver_last_name : rel.sender_last_name;
-            return {
-                id: requestId,
-                first_name: requestFirstName,
-                last_name: requestLastName,
-                relationship_status_id: rel.relationship_status_id
-            };
-        });
+        const pendingRequests = relationships.map(rel => ({
+            id: rel.sender_id,
+            first_name: rel.sender_first_name,
+            last_name: rel.sender_last_name,
+            image: rel.sender_image,
+            email: rel.sender_email,
+            relationship_status_id: rel.relationship_status_id,
+            created_at: rel.created_at
+        }));
         res.status(200).json(pendingRequests);
     } catch (err) {
-        res.status(500).json({ error: 'Failed to retrieve pending friend requests' })
+        console.error(`Error retrieving pending friend requests for user ${userId}:`, err);
+        res.status(500).json({ error: 'Failed to retrieve pending friend requests' });
     }
 };
 
