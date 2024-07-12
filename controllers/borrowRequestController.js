@@ -6,7 +6,9 @@ import {
     getBorrowRequestById,
     getBorrowRequestsByStatus,
     createBorrowRequest,
-    updateBorrowRequest
+    checkOverlappingRequests,
+    updateBorrowRequest,
+    deleteBorrowRequest
 } from '../models/borrowRequest.js'
 
 
@@ -26,9 +28,10 @@ export const getBorrowRequestsByBorrowerHandler = async (req, res) => {
         const requests = await getBorrowRequestsByBorrower(userId);
         res.status(200).json(requests);
     } catch (err) {
+        console.error(`Error retrieving borrow requests for borrower ${userId}:`, err);
         res.status(500).json({ error: 'Failed to retrieve borrow requests' });
     }
-}
+};
 
 export const getBorrowRequestsByLenderHandler = async (req, res) => {
     const userId = req.params.userId;
@@ -57,12 +60,13 @@ export const getBorrowRequestByIdHandler = async (req, res) => {
 };
 
 export const getBorrowRequestByItemHandler = async (req, res) => {
-    const itemId = req.params.itemId;
+    const { itemId } = req.params;
 
     try {
         const requests = await getBorrowRequestByItem(itemId);
         res.status(200).json(requests);
     } catch (err) {
+        console.error('Error retrieving borrow requests:', err);
         res.status(500).json({ error: 'Failed to retrieve borrow requests' });
     }
 };
@@ -79,38 +83,31 @@ export const getBorrowRequestsByStatusHandler = async (req, res) => {
 };
 
 export const createBorrowRequestHandler = async (req, res) => {
-    const {
-        borrower_id,
-        lender_id,
-        item_id,
-        start_date,
-        end_date,
-        borrow_status_id
-    } = req.body;
+    const { borrower_id, lender_id, item_id, start_date, end_date, borrow_status_id } = req.body;
 
     try {
-        const [id] = await createBorrowRequest({
+        console.log('Creating borrow request with data:', { borrower_id, lender_id, item_id, start_date, end_date, borrow_status_id });
+
+        const overlappingRequests = await checkOverlappingRequests(item_id, start_date, end_date);
+
+        if (overlappingRequests.length > 0) {
+            console.log('Overlapping requests found:', overlappingRequests);
+            return res.status(400).json({ error: 'There is already a request for these dates.' });
+        }
+
+        await createBorrowRequest({
             borrower_id,
             lender_id,
             item_id,
             start_date,
             end_date,
-            borrow_status_id
+            borrow_status_id,
         });
 
-        const newBorrowRequest = {
-            id,
-            borrower_id,
-            lender_id,
-            item_id,
-            start_date,
-            end_date,
-            borrow_status_id
-        };
-
-        res.status(201).json(newBorrowRequest);
+        res.status(201).json({ message: 'Borrow request created successfully.' });
     } catch (err) {
-        res.status(500).json({ error: 'Failed to create borrow request' });
+        console.error('Error creating borrow request:', err);
+        res.status(500).json({ error: 'Failed to create borrow request.' });
     }
 };
 
@@ -128,5 +125,16 @@ export const updateBorrowRequestHandler = async (req, res) => {
         res.status(200).json({ message: 'Borrow request status updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Failed to update borrow request status' });
+    }
+};
+
+export const deleteBorrowRequestHandler = async (req, res) => {
+    const requestId = req.params.requestId;
+
+    try {
+        await deleteBorrowRequest(requestId);
+        res.status(200).json({ message: 'Borrow request deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to delete borrow request' });
     }
 };

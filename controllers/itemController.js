@@ -66,7 +66,6 @@ export const getItemByIdHandler = async (req, res) => {
     }
 };
 
-// ********************************
 export const updateItemByIdHandler = async (req, res) => {
     const { itemId } = req.params;
     const { name, description, type_id, status_id } = req.body;
@@ -100,7 +99,6 @@ export const updateItemByIdHandler = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-// ********************************
 
 
 export const updateItemStatusHandler = async (req, res) => {
