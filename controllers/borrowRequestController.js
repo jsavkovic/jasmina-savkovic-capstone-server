@@ -22,22 +22,22 @@ export const getBorrowRequestsHandler = async (req, res) => {
 };
 
 export const getBorrowRequestsByBorrowerHandler = async (req, res) => {
-    const userId = req.params.userId;
-
+    const { userId } = req.params;
     try {
-        const requests = await getBorrowRequestsByBorrower(userId);
-        res.status(200).json(requests);
+        const borrowRequests = await getBorrowRequestsByBorrower(userId);
+        res.status(200).json(borrowRequests);
     } catch (err) {
-        console.error(`Error retrieving borrow requests for borrower ${userId}:`, err);
-        res.status(500).json({ error: 'Failed to retrieve borrow requests' });
+        console.error('Error fetching borrow requests:', err);
+        res.status(500).json({ error: 'Failed to fetch borrow requests' });
     }
 };
 
 export const getBorrowRequestsByLenderHandler = async (req, res) => {
-    const userId = req.params.userId;
+    const { userId } = req.params;
+    const { borrow_status_id } = req.query;
 
     try {
-        const requests = await getBorrowRequestsByLender(userId);
+        const requests = await getBorrowRequestsByLender(userId, borrow_status_id);
         res.status(200).json(requests);
     } catch (err) {
         console.error(`Error retrieving borrow requests for lender ${userId}:`, err);
@@ -46,18 +46,23 @@ export const getBorrowRequestsByLenderHandler = async (req, res) => {
 };
 
 export const getBorrowRequestByIdHandler = async (req, res) => {
-    const { id } = req.params;
+    const { requestId } = req.params;
+    console.log(`Handler called for borrow request id: ${requestId}`);
     try {
-        const request = await getBorrowRequestById(id);
+        const request = await getBorrowRequestById(requestId);
         if (!request) {
+            console.log(`Borrow request not found for id: ${requestId}`);
             return res.status(404).json({ error: 'Borrow request not found' });
         }
         res.status(200).json(request);
     } catch (err) {
-        console.error(`Error retrieving borrow request ${id}:`, err);
+        console.error(`Error retrieving borrow request ${requestId}:`, err);
         res.status(500).json({ error: 'Failed to retrieve borrow request' });
     }
 };
+
+
+
 
 export const getBorrowRequestByItemHandler = async (req, res) => {
     const { itemId } = req.params;
@@ -116,14 +121,19 @@ export const updateBorrowRequestHandler = async (req, res) => {
     const { borrow_status_id, start_date, end_date } = req.body;
 
     const updateData = {};
-    if (borrow_status_id) updateData.borrow_status_id = borrow_status_id;
-    if (start_date) updateData.start_date = start_date;
-    if (end_date) updateData.end_date = end_date;
+    if (borrow_status_id !== undefined) updateData.borrow_status_id = borrow_status_id;
+    if (start_date !== undefined) updateData.start_date = start_date;
+    if (end_date !== undefined) updateData.end_date = end_date;
+
+    console.log(`Request to update borrow request with id: ${requestId}`);
+    console.log('Update data:', updateData);
 
     try {
-        await updateBorrowRequest(requestId, updateData);
+        const result = await updateBorrowRequest(requestId, updateData);
+        console.log('Update result:', result);
         res.status(200).json({ message: 'Borrow request status updated successfully' });
     } catch (err) {
+        console.error(`Failed to update borrow request ${requestId}:`, err);
         res.status(500).json({ error: 'Failed to update borrow request status' });
     }
 };

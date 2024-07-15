@@ -4,6 +4,8 @@ const db = knex(knexConfig);
 
 import {
     getAllItems,
+    getItemTypes,
+    getItemsByUserIdAndStatus,
     createItem,
     getItemById,
     updateItemById,
@@ -15,6 +17,34 @@ export const getAllItemsHandler = async (req, res) => {
         const items = await getAllItems();
         res.status(200).json(items);
     } catch (err) {
+        res.status(500).json({ error: 'Failed to retrieve items' });
+    }
+};
+
+export const getItemTypesHandler = async (req, res) => {
+    try {
+        const itemTypes = await getItemTypes();
+        res.status(200).json(itemTypes);
+    } catch (err) {
+        console.error('Error fetching item types:', err);
+        res.status(500).json({ error: 'Failed to fetch item types' });
+    }
+};
+
+export const getItemsByUserIdAndStatusHandler = async (req, res) => {
+    const { userId } = req.params;
+    const { status_id, type_id } = req.query;
+
+    try {
+        const items = await getItemsByUserIdAndStatus(userId, status_id, type_id);
+
+        if (items.length > 0) {
+            res.status(200).json(items);
+        } else {
+            res.status(204).json({ message: 'No items found' });
+        }
+    } catch (err) {
+        console.error(`Error retrieving items for user ${userId} with status ${status_id}:`, err);
         res.status(500).json({ error: 'Failed to retrieve items' });
     }
 };

@@ -7,6 +7,30 @@ export const getAllItems = () => {
     return db('item').select('*');
 };
 
+export const getItemTypes = () => {
+    return db('item_type').select('*');
+};
+
+export const getItemsByUserIdAndStatus = (userId, statusId, typeId) => {
+    const query = db('item')
+        .join('item_status', 'item.status_id', '=', 'item_status.id')
+        .join('item_type', 'item.type_id', '=', 'item_type.id')
+        .join('users', 'item.user_id', '=', 'users.id')
+        .where('item.user_id', userId)
+        .andWhere('item.status_id', statusId);
+
+    if (typeId) {
+        query.andWhere('item.type_id', typeId);
+    }
+
+    return query.select(
+        'item.*',
+        'item_status.status as status',
+        'item_type.type as category',
+        db.raw("CONCAT(users.first_name, ' ', users.last_name) as owner")
+    );
+};
+
 export const createItem = async (newItem) => {
     const [id] = await db('item').insert(newItem);
     return getItemById(id);
