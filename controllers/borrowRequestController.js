@@ -90,9 +90,12 @@ export const getBorrowRequestsByStatusHandler = async (req, res) => {
 export const createBorrowRequestHandler = async (req, res) => {
     const { borrower_id, lender_id, item_id, start_date, end_date, borrow_status_id } = req.body;
 
-    try {
-        console.log('Creating borrow request with data:', { borrower_id, lender_id, item_id, start_date, end_date, borrow_status_id });
+    if (!borrower_id || !lender_id || !item_id || !start_date || !end_date || !borrow_status_id) {
+        return res.status(400).json({ error: 'Missing item data.' });
+    }
+    console.log('Creating borrow request with data:', { borrower_id, lender_id, item_id, start_date, end_date, borrow_status_id });
 
+    try {
         const overlappingRequests = await checkOverlappingRequests(item_id, start_date, end_date);
 
         if (overlappingRequests.length > 0) {

@@ -42,10 +42,12 @@ export const getPendingRequestsByUserId = (userId) => {
             'u1.last_name as sender_last_name',
             'u1.image as sender_image',
             'u1.email as sender_email',
-            'u1.id as sender_id')
+            'u1.id as sender_id'
+        )
         .where('user_relationship.receiver_id', userId)
-        .andWhere('relationship_status_id', 1)
+        .andWhere('user_relationship.relationship_status_id', 1);
 };
+
 
 export const createFriendRequest = (relationship) => {
     return db('user_relationship').insert(relationship);

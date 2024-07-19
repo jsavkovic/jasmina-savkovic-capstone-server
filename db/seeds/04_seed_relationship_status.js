@@ -9,10 +9,10 @@ export function seed(knex) {
     })
     .then(() => {
       return knex('relationship_status').insert([
-        { id: 1, status: 'pending' },
-        { id: 2, status: 'accepted' },
-        { id: 3, status: 'declined' },
-        { id: 4, status: 'cancelled' }
+        { id: 1, status: 'Pending' },
+        { id: 2, status: 'Accepted' },
+        { id: 3, status: 'Declined' },
+        { id: 4, status: 'Cancelled' }
       ]);
     })
     .then(() => {

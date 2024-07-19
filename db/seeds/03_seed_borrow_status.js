@@ -9,12 +9,12 @@ export function seed(knex) {
     })
     .then(() => {
       return knex('borrow_status').insert([
-        { id: 1, status: 'requested' },
-        { id: 2, status: 'accepted' },
-        { id: 3, status: 'borrowed' },
-        { id: 4, status: 'declined' },
-        { id: 5, status: 'returned' },
-        { id: 6, status: 'cancelled' }
+        { id: 1, status: 'Requested' },
+        { id: 2, status: 'Accepted' },
+        { id: 3, status: 'Borrowed' },
+        { id: 4, status: 'Declined' },
+        { id: 5, status: 'Returned' },
+        { id: 6, status: 'Cancelled' }
       ]);
     })
     .then(() => {

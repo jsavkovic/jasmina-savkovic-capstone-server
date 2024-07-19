@@ -45,25 +45,21 @@ export const getFriendsHandler = async (req, res) => {
 };
 
 export const getPendingRequestsHandler = async (req, res) => {
-    const userId = req.params.userId;
+    const { userId } = req.params;
+    if (!userId) {
+        return res.status(400).json({ message: 'Missing userId' });
+    }
 
     try {
-        const relationships = await getPendingRequestsByUserId(userId);
-        const pendingRequests = relationships.map(rel => ({
-            id: rel.sender_id,
-            first_name: rel.sender_first_name,
-            last_name: rel.sender_last_name,
-            image: rel.sender_image,
-            email: rel.sender_email,
-            relationship_status_id: rel.relationship_status_id,
-            created_at: rel.created_at
-        }));
+        const pendingRequests = await getPendingRequestsByUserId(userId);
         res.status(200).json(pendingRequests);
     } catch (err) {
-        console.error(`Error retrieving pending friend requests for user ${userId}:`, err);
-        res.status(500).json({ error: 'Failed to retrieve pending friend requests' });
+        console.error('Error fetching pending friend requests:', err);
+        res.status(500).json({ message: 'Error fetching pending friend requests', error: err.message });
     }
 };
+
+
 
 export const createFriendRequestHandler = async (req, res) => {
     const { sender_id, receiver_id } = req.body;
