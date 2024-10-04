@@ -40,7 +40,7 @@ export function seed(knex) {
         { id: 15, name: 'Rocking Chair', description: 'A rocking chair for the nursery. Provides comfort and relaxation. Made with high-quality materials.', status_id: 1, type_id: 9, image: 'rocking_chair.jpg', user_id: 2, created_at: knex.fn.now(), updated_at: knex.fn.now() },
         { id: 16, name: 'Snow Suit 0-3 months', description: 'A snow suit for winter. Keeps the baby warm and cozy. Size 0-3 months.', status_id: 1, type_id: 6, image: 'snow_suit1.jpg', user_id: 2, created_at: knex.fn.now(), updated_at: knex.fn.now() },
         { id: 17, name: 'Snow Suit 6-9 months', description: 'A snow suit for winter. Keeps the baby warm and cozy. Size 6-9 months.', status_id: 1, type_id: 6, image: 'snow_suit2.jpg', user_id: 2, created_at: knex.fn.now(), updated_at: knex.fn.now() },
-        { id: 18, name: 'Car Seat and Stroller Duo', description: 'A car seat and stroller duo. Convenient and versatile. Great for travel.', status_id: 1, type_id: 4, image: 'car_seat_stroller_duo.jpg', user_id: 2, created_at: knex.fn.now(), updated_at: knex.fn.now() },
+        { id: 18, name: 'Car Seat and Stroller', description: 'A car seat and stroller duo. Convenient and versatile. Great for travel.', status_id: 1, type_id: 4, image: 'car_seat_stroller_duo.jpg', user_id: 2, created_at: knex.fn.now(), updated_at: knex.fn.now() },
         { id: 19, name: 'Crib', description: 'A comfortable crib for babies. Provides a safe and cozy sleeping environment. Sturdy and durable.', status_id: 1, type_id: 1, image: 'crib.jpg', user_id: 2, created_at: knex.fn.now(), updated_at: knex.fn.now() },
 
         // Items for other users
